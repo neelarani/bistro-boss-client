@@ -1,0 +1,6 @@
+.featured-item {
+  background-image: url('../../../assets/home/featured.jpg');
+  background-blend-mode: overlay;
+  background-color: rgb(0, 0, 0, 0.5);
+  background-position: center;
+}
