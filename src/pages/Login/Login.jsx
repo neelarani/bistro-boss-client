@@ -6,15 +6,19 @@ import {
   validateCaptcha,
 } from 'react-simple-captcha';
 import { AuthContext } from '../../providers/AuthProvider';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { Helmet } from 'react-helmet-async';
 import Swal from 'sweetalert2';
+import SocialLogin from '../../components/SocialLogin/SocialLogin';
 
 const Login = () => {
   const captchaRef = useRef(null);
   const [disabled, setDisabled] = useState(true);
   const { signIn } = useContext(AuthContext);
   const navigate = useNavigate();
+  const location = useLocation();
+
+  const from = location.state?.from?.pathname || '/';
 
   useEffect(() => {
     loadCaptchaEnginge(6);
@@ -28,7 +32,6 @@ const Login = () => {
 
     signIn(email, password)
       .then(result => {
-        const user = result.user;
         Swal.fire({
           title: 'Login Successfully',
           showClass: {
@@ -46,7 +49,7 @@ const Login = () => {
     `,
           },
         });
-        navigate('/');
+        navigate(from, { replace: true });
       })
       .catch(error => {
         console.log(error.message);
@@ -123,6 +126,7 @@ const Login = () => {
                 />
               </div>
               <div className="form-control mt-6">
+                {/* TODO: apply disabled for re captcha */}
                 <input
                   disabled={disabled}
                   className="btn btn-primary"
@@ -139,6 +143,8 @@ const Login = () => {
                 </span>
               </small>
             </p>
+            <div className="divider"></div>
+            <SocialLogin></SocialLogin>
           </div>
         </div>
       </div>
